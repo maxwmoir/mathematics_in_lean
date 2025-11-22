@@ -153,14 +153,13 @@ theorem mul_inv_cancel (a : G) : a * a⁻¹ = 1 := by
     rw [x, y]
   rw [←z, ←mul_assoc, ←mul_assoc, y, mul_assoc, one_mul]
 
-
-
-
 theorem mul_one (a : G) : a * 1 = a := by
-  sorry
+  rw [←inv_mul_cancel a, ←mul_assoc, mul_inv_cancel, one_mul]
 
 theorem mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹ := by
-  sorry
+  have y : (a * b) * (b⁻¹ * a⁻¹) = 1 := by
+    rw [←mul_assoc, mul_assoc a, mul_inv_cancel, mul_one, mul_inv_cancel]
+  rw [←mul_one (a * b)⁻¹, ←y, ←mul_assoc, inv_mul_cancel, one_mul]
 
 end MyGroup
 
