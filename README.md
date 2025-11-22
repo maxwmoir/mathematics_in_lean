@@ -24,7 +24,7 @@ For the Lean 3 version, see [https://github.com/leanprover-community/mathematics
 - [ ] C02
   - [x] 2.1
   - [x] 2.2
-  - [ ] 2.3
+  - [x] 2.3
   - [ ] 2.4
   - [ ] 2.5
 - [ ] C03
