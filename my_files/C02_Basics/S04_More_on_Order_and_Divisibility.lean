@@ -106,12 +106,16 @@ example : min a b + c = min (a + c) (b + c) := by
     rw [add_comm b]
     apply min_le_right
 
-
-
 #check (abs_add : ∀ a b : ℝ, |a + b| ≤ |a| + |b|)
 
-example : |a| - |b| ≤ |a - b| :=
-  sorry
+example : |a| - |b| ≤ |a - b| := by
+  nth_rewrite 1 [←sub_add_cancel a b]
+  rw [←sub_add_cancel |a - b| |b|, ←add_comm |b|, add_sub]
+  apply sub_le_sub_right
+  rw [add_comm |b|]
+  apply abs_add
+
+
 end
 
 section
