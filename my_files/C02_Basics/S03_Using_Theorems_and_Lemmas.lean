@@ -144,7 +144,7 @@ example : 2*a*b ≤ a^2 + b^2 := by
     _ ≥ 0 := by apply pow_two_nonneg
   linarith
 
--- I know this is not the best way to do this, I'll have to revisit
+-- I know this is not the best way to do this, I'll have to revisit this
 -- to find a more concise method for this proof.
 
 example : |a*b| ≤ (a^2 + b^2)/2 := by
