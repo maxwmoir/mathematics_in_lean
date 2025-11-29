@@ -19,8 +19,6 @@ For the Lean 3 version, see [https://github.com/leanprover-community/mathematics
 ### My Progress
 
 - [x] C01
-  - [x] 1.1
-  - [x] 1.2
 - [x] C02
 - [ ] C03
   - [ ] 3.1
