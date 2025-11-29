@@ -21,12 +21,12 @@ For the Lean 3 version, see [https://github.com/leanprover-community/mathematics
 - [x] C01
   - [x] 1.1
   - [x] 1.2
-- [ ] C02
+- [x] C02
   - [x] 2.1
   - [x] 2.2
   - [x] 2.3
   - [x] 2.4
-  - [ ] 2.5
+  - [x] 2.5
 - [ ] C03
 - [ ] C04
 - [ ] C05
