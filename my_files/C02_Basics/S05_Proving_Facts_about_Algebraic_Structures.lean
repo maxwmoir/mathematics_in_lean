@@ -30,28 +30,103 @@ variable (x y z : α)
 #check (inf_le_left : x ⊓ y ≤ x)
 #check (inf_le_right : x ⊓ y ≤ y)
 #check (le_inf : z ≤ x → z ≤ y → z ≤ x ⊓ y)
+
 #check x ⊔ y
 #check (le_sup_left : x ≤ x ⊔ y)
 #check (le_sup_right : y ≤ x ⊔ y)
 #check (sup_le : x ≤ z → y ≤ z → x ⊔ y ≤ z)
 
-example : x ⊓ y = y ⊓ x := by
-  sorry
+theorem my_inf_comm : x ⊓ y = y ⊓ x := by
+  apply le_antisymm
+  repeat
+    apply le_inf
+    apply inf_le_right
+    apply inf_le_left
 
-example : x ⊓ y ⊓ z = x ⊓ (y ⊓ z) := by
-  sorry
+theorem my_inf_assoc : x ⊓ y ⊓ z = x ⊓ (y ⊓ z) := by
+  apply le_antisymm
+  · apply le_inf
+    · rw [my_inf_comm ]
+      trans (x ⊓ y)
+      apply inf_le_right
+      apply inf_le_left
+
+    · apply le_inf
+      · rw [my_inf_comm]
+        trans (x ⊓ y)
+        apply inf_le_right
+        apply inf_le_right
+
+      · rw [my_inf_comm]
+        apply inf_le_left
+
+  · show x ⊓ (y ⊓ z) ≤ x ⊓ y ⊓ z
+    apply le_inf
+    apply le_inf
+    · apply inf_le_left
+    · trans (y ⊓ z)
+      apply inf_le_right
+      apply inf_le_left
+    · trans (y ⊓ z)
+      apply inf_le_right
+      apply inf_le_right
+
 
 example : x ⊔ y = y ⊔ x := by
-  sorry
+  apply le_antisymm
+  repeat
+    apply sup_le
+    apply le_sup_right
+    apply le_sup_left
 
 example : x ⊔ y ⊔ z = x ⊔ (y ⊔ z) := by
-  sorry
+  apply le_antisymm
+
+  · show x ⊔ y ⊔ z ≤ x ⊔ (y ⊔ z)
+    apply sup_le
+    apply sup_le
+    · apply le_sup_left
+    · trans (y ⊔ z)
+      apply le_sup_left
+      apply le_sup_right
+    · trans (y ⊔ z)
+      apply le_sup_right
+      apply le_sup_right
+
+  · show x ⊔ (y ⊔ z) ≤ x ⊔ y ⊔ z
+    apply sup_le
+    rw [sup_comm]
+    trans (x ⊔ y)
+    apply le_sup_left
+    apply le_sup_right
+
+    apply sup_le
+    rw [sup_comm]
+    trans (x ⊔ y)
+    apply le_sup_right
+    apply le_sup_right
+
+    rw [sup_comm]
+    apply le_sup_left
 
 theorem absorb1 : x ⊓ (x ⊔ y) = x := by
-  sorry
+  apply le_antisymm
+  · apply inf_le_left
+
+  · apply le_inf
+    apply le_refl
+    apply le_sup_left
 
 theorem absorb2 : x ⊔ x ⊓ y = x := by
-  sorry
+  apply le_antisymm
+
+  · show x ⊔ x ⊓ y ≤ x
+    apply sup_le
+    apply le_refl
+    apply inf_le_left
+
+  · show x ≤ x ⊔ x ⊓ y
+    apply le_sup_left
 
 end
 
@@ -70,11 +145,17 @@ variable {α : Type*} [Lattice α]
 variable (a b c : α)
 
 example (h : ∀ x y z : α, x ⊓ (y ⊔ z) = x ⊓ y ⊔ x ⊓ z) : a ⊔ b ⊓ c = (a ⊔ b) ⊓ (a ⊔ c) := by
-  sorry
+  rw [h, inf_comm (a ⊔ b), inf_sup_self, inf_comm (a ⊔ b), h, ←sup_assoc]
+  nth_rewrite 2 [inf_comm]
+  rw [sup_inf_self, inf_comm c]
+
 
 example (h : ∀ x y z : α, x ⊔ y ⊓ z = (x ⊔ y) ⊓ (x ⊔ z)) : a ⊓ (b ⊔ c) = a ⊓ b ⊔ a ⊓ c := by
-  sorry
 
+
+  rw [h, ←sup_comm a, sup_inf_self]
+  nth_rewrite 2 [sup_comm]
+  rw [h, ←inf_assoc, sup_comm c, inf_sup_self, sup_comm c]
 end
 
 section
@@ -109,4 +190,3 @@ example (x y : X) : 0 ≤ dist x y := by
   sorry
 
 end
-
