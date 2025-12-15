@@ -79,8 +79,14 @@ example (nnf : FnLb f 0) (nng : FnLb g 0) : FnLb (fun x ↦ f x * g x) 0 := by
   apply nng
 
 example (hfa : FnUb f a) (hgb : FnUb g b) (nng : FnLb g 0) (nna : 0 ≤ a) :
-    FnUb (fun x ↦ f x * g x) (a * b) :=
-  sorry
+    FnUb (fun x ↦ f x * g x) (a * b) := by
+      intro x
+      dsimp
+      apply mul_le_mul
+      apply hfa
+      apply hgb
+      apply nng
+      apply nna
 
 end
 
@@ -118,8 +124,12 @@ example {c : ℝ} (mf : Monotone f) (nnc : 0 ≤ c) : Monotone fun x ↦ c * f x
   apply mf xlec
   apply nnc
 
-example (mf : Monotone f) (mg : Monotone g) : Monotone fun x ↦ f (g x) :=
-  sorry
+example (mf : Monotone f) (mg : Monotone g) : Monotone fun x ↦ f (g x) := by
+  intro a b aleb
+  dsimp
+  apply mf
+  apply mg
+  apply aleb
 
 def FnEven (f : ℝ → ℝ) : Prop :=
   ∀ x, f x = f (-x)
@@ -135,14 +145,26 @@ example (ef : FnEven f) (eg : FnEven g) : FnEven fun x ↦ f x + g x := by
 
 
 example (of : FnOdd f) (og : FnOdd g) : FnEven fun x ↦ f x * g x := by
-  sorry
+  intro x
+  calc
+    (fun x => f x * g x) x = f x * g x := rfl
+    _ = -f (-x) * -g (-x) := by rw [of, og]
+    _ = f (-x) * g (-x) := by simp
+
 
 example (ef : FnEven f) (og : FnOdd g) : FnOdd fun x ↦ f x * g x := by
-  sorry
+  intro x
+  calc
+    (fun x => f x * g x) x = f x * g x := rfl
+    _ = f (-x) * -g (-x) := by rw [ef, og]
+    _ = -(fun x => f x * g x) (-x) := by simp
 
 example (ef : FnEven f) (og : FnOdd g) : FnEven fun x ↦ f (g x) := by
-  sorry
-
+  intro x
+  calc
+    (fun x => f (g x)) x = f (g x) := rfl
+    _ = f (- -g (-x)) := by rw [ef, og]
+    _ = (fun x => f (g x)) (-x) := by simp
 end
 
 section
