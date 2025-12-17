@@ -78,6 +78,7 @@ theorem aux : min a b + c ≤ min (a + c) (b + c) := by
     apply add_le_add
     apply min_le_left
     apply le_refl
+
   · show min a b + c ≤ b + c
     apply add_le_add
     apply min_le_right

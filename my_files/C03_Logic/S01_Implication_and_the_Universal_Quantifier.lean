@@ -178,7 +178,8 @@ example : s ⊆ s := by
 theorem Subset.refl : s ⊆ s := fun x xs ↦ xs
 
 theorem Subset.trans : r ⊆ s → s ⊆ t → r ⊆ t := by
-  sorry
+  intro rts stt x xir
+  exact stt (rts xir)
 
 end
 
@@ -189,8 +190,12 @@ variable (s : Set α) (a b : α)
 def SetUb (s : Set α) (a : α) :=
   ∀ x, x ∈ s → x ≤ a
 
-example (h : SetUb s a) (h' : a ≤ b) : SetUb s b :=
-  sorry
+example (h : SetUb s a) (h' : a ≤ b) : SetUb s b := by
+  intro x xis
+  apply le_trans
+  apply h
+  apply xis
+  apply h'
 
 end
 
@@ -203,12 +208,19 @@ example (c : ℝ) : Injective fun x ↦ x + c := by
   exact (add_left_inj c).mp h'
 
 example {c : ℝ} (h : c ≠ 0) : Injective fun x ↦ c * x := by
-  sorry
+  intro x₁ x₂ h'
+  calc
+    (fun x => c * x) x₁ = c * x₁ := by rfl
+    _ = (fun x => c * x) x₂ := by apply?
 
 variable {α : Type*} {β : Type*} {γ : Type*}
 variable {g : β → γ} {f : α → β}
 
 example (injg : Injective g) (injf : Injective f) : Injective fun x ↦ g (f x) := by
-  sorry
+  intro a b c
+  apply injf
+  apply injg
+  apply c
+
 
 end

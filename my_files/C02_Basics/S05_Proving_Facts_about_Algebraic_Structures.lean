@@ -174,6 +174,11 @@ theorem thm1 (h : a ≤ b) : 0 ≤ b - a := by
 
 theorem thm2 (h: 0 ≤ b - a) : a ≤ b := by
   rw [←add_zero a, ←add_zero b]
+
+#check (inf_sup_left x y z : x ⊓ (y ⊔ z) = x ⊓ y ⊔ x ⊓ z)
+#check (inf_sup_right x y z : (x ⊔ y) ⊓ z = x ⊓ z ⊔ y ⊓ z)
+#check (sup_inf_left x y z : x ⊔ y ⊓ z = (x ⊔ y) ⊓ (x ⊔ z))
+#check (sup_inf_right x y z : x ⊓ y ⊔ z = (x ⊔ z) ⊓ (y ⊔ z))
   nth_rewrite 2 [←sub_self a]
   rw [add_sub, add_comm b, ←add_sub]
   apply add_le_add_left h
