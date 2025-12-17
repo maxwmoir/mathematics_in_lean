@@ -209,9 +209,8 @@ example (c : ℝ) : Injective fun x ↦ x + c := by
 
 example {c : ℝ} (h : c ≠ 0) : Injective fun x ↦ c * x := by
   intro x₁ x₂ h'
-  calc
-    (fun x => c * x) x₁ = c * x₁ := by rfl
-    _ = (fun x => c * x) x₂ := by apply?
+  apply (mul_right_inj' h).mp
+  apply h'
 
 variable {α : Type*} {β : Type*} {γ : Type*}
 variable {g : β → γ} {f : α → β}

@@ -41,6 +41,32 @@ theorem fnUb_add {f g : ℝ → ℝ} {a b : ℝ} (hfa : FnUb f a) (hgb : FnUb g 
     FnUb (fun x ↦ f x + g x) (a + b) :=
   fun x ↦ add_le_add (hfa x) (hgb x)
 
+theorem fnLb_add (hfa : FnLb f a) (hgb : FnLb g b) : FnLb (fun x ↦ f x + g x) (a + b) := by
+  intro x
+  dsimp
+  apply add_le_add
+  apply hfa
+  apply hgb
+
+
+theorem fnLb_mul_zero (nnf : FnLb f 0) (nng : FnLb g 0) : FnLb (fun x ↦ f x * g x) 0 := by
+  intro x
+  dsimp
+  apply mul_nonneg
+  apply nnf
+  apply nng
+
+
+theorem fnUb_mul (hfa : FnUb f a) (hgb : FnUb g b) (nng : FnLb g 0) (nna : 0 ≤ a) :
+    FnUb (fun x ↦ f x * g x) (a * b) := by
+      intro x
+      dsimp
+      apply mul_le_mul
+      apply hfa
+      apply hgb
+      apply nng
+      apply nna
+
 section
 
 variable {f g : ℝ → ℝ}
@@ -52,10 +78,23 @@ example (ubf : FnHasUb f) (ubg : FnHasUb g) : FnHasUb fun x ↦ f x + g x := by
   apply fnUb_add ubfa ubgb
 
 example (lbf : FnHasLb f) (lbg : FnHasLb g) : FnHasLb fun x ↦ f x + g x := by
-  sorry
+  rcases lbf with ⟨a, lbfa⟩
+  rcases lbg with ⟨b, lbfg⟩
+  use a + b
+  apply fnLb_add
+  apply lbfa
+  apply lbfg
+
 
 example {c : ℝ} (ubf : FnHasUb f) (h : c ≥ 0) : FnHasUb fun x ↦ c * f x := by
-  sorry
+  rcases ubf with ⟨a, ubfa⟩
+  use c * a
+  intro x
+  simp
+  apply mul_le_mul_of_nonneg_left
+  · apply ubfa
+  · apply h
+
 
 example : FnHasUb f → FnHasUb g → FnHasUb fun x ↦ f x + g x := by
   rintro ⟨a, ubfa⟩ ⟨b, ubgb⟩
