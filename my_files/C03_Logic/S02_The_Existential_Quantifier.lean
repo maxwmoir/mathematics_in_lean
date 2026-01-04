@@ -162,13 +162,15 @@ section
 variable {a b c : ℕ}
 
 example (divab : a ∣ b) (divbc : b ∣ c) : a ∣ c := by
-  rcases divab with ⟨d, beq⟩
-  rcases divbc with ⟨e, ceq⟩
-  rw [ceq, beq]
+  rcases divab with ⟨d, rfl⟩
+  rcases divbc with ⟨e, rfl⟩
   use d * e; ring
 
 example (divab : a ∣ b) (divac : a ∣ c) : a ∣ b + c := by
-  sorry
+  rcases divab with ⟨d, rfl⟩
+  rcases divac with ⟨e, rfl⟩
+  use d + e;
+  ring
 
 end
 
@@ -182,7 +184,9 @@ example {c : ℝ} : Surjective fun x ↦ x + c := by
   dsimp; ring
 
 example {c : ℝ} (h : c ≠ 0) : Surjective fun x ↦ c * x := by
-  sorry
+  intro x
+  use x / c
+  field_simp
 
 example (x y : ℝ) (h : x - y ≠ 0) : (x ^ 2 - y ^ 2) / (x - y) = x + y := by
   field_simp [h]
@@ -202,6 +206,9 @@ variable {α : Type*} {β : Type*} {γ : Type*}
 variable {g : β → γ} {f : α → β}
 
 example (surjg : Surjective g) (surjf : Surjective f) : Surjective fun x ↦ g (f x) := by
-  sorry
+  intro x
+  rcases surjg x with ⟨x₁, rfl⟩
+  rcases surjf x₁ with ⟨x₂, rfl⟩
+  use x₂
 
 end

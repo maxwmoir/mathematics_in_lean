@@ -19,6 +19,7 @@ variable (h : a ≤ b) (h' : b ≤ c)
 end
 
 example (x y z : ℝ) (h₀ : x ≤ y) (h₁ : y ≤ z) : x ≤ z := by
+
   apply le_trans
   · apply h₀
   · apply h₁
