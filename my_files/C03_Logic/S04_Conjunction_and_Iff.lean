@@ -63,8 +63,15 @@ example {x y : ℝ} (h : x ≤ y ∧ x ≠ y) : ¬y ≤ x := by
 example {x y : ℝ} (h : x ≤ y ∧ x ≠ y) : ¬y ≤ x :=
   fun h' ↦ h.right (le_antisymm h.left h')
 
-example {m n : ℕ} (h : m ∣ n ∧ m ≠ n) : m ∣ n ∧ ¬n ∣ m :=
-  sorry
+example {m n : ℕ} (h : m ∣ n ∧ m ≠ n) : m ∣ n ∧ ¬n ∣ m := by
+  constructor
+  · exact h.left
+  · intro h₁
+    rcases h with ⟨h₂, h₃⟩
+    contrapose! h₃
+    apply dvd_antisymm
+    · exact h₂
+    · exact h₁
 
 example : ∃ x : ℝ, 2 < x ∧ x < 4 :=
   ⟨5 / 2, by norm_num, by norm_num⟩
@@ -101,15 +108,40 @@ example {x y : ℝ} (h : x ≤ y) : ¬y ≤ x ↔ x ≠ y := by
 example {x y : ℝ} (h : x ≤ y) : ¬y ≤ x ↔ x ≠ y :=
   ⟨fun h₀ h₁ ↦ h₀ (by rw [h₁]), fun h₀ h₁ ↦ h₀ (le_antisymm h h₁)⟩
 
-example {x y : ℝ} : x ≤ y ∧ ¬y ≤ x ↔ x ≤ y ∧ x ≠ y :=
-  sorry
+example {x y : ℝ} : x ≤ y ∧ ¬y ≤ x ↔ x ≤ y ∧ x ≠ y := by
+  constructor <;> rintro ⟨h₀, h₁⟩
+
+  constructor
+  · exact h₀
+  · contrapose! h₁
+    linarith
+
+  constructor
+  · exact h₀
+  · contrapose! h₁
+    linarith
 
 theorem aux {x y : ℝ} (h : x ^ 2 + y ^ 2 = 0) : x = 0 :=
-  have h' : x ^ 2 = 0 := by sorry
+  have h₀ := pow_two_nonneg x
+  have h₁ := pow_two_nonneg y
+
+  have h' : x ^ 2 = 0 := by
+    linarith
   pow_eq_zero h'
 
-example (x y : ℝ) : x ^ 2 + y ^ 2 = 0 ↔ x = 0 ∧ y = 0 :=
-  sorry
+example (x y : ℝ) : x ^ 2 + y ^ 2 = 0 ↔ x = 0 ∧ y = 0 := by
+  constructor <;> rintro h
+
+  have x0 : x = 0 := aux h
+  rw [add_comm] at h
+  have y0 : y = 0 := aux h
+  constructor
+  · exact x0
+  · exact y0
+
+  rcases h with ⟨h₁, h₂⟩
+  rw [h₁, h₂]
+  linarith
 
 section
 
