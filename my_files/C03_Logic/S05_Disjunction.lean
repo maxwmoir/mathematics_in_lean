@@ -58,21 +58,63 @@ example : x < |y| → x < y ∨ x < -y := by
 namespace MyAbs
 
 theorem le_abs_self (x : ℝ) : x ≤ |x| := by
-  sorry
+  rcases le_or_gt 0 x with h | h
+
+  · rw [abs_of_nonneg]
+    exact h
+
+  · rw [abs_of_neg]
+    apply Left.self_le_neg
+    apply le_of_lt h
+    exact h
 
 theorem neg_le_abs_self (x : ℝ) : -x ≤ |x| := by
-  sorry
+  rcases le_or_gt 0 x with h | h
+  · rw [abs_of_nonneg, neg_le_self_iff]
+    repeat
+    exact h
+  · rw [abs_of_neg]
+    exact h
 
 theorem abs_add (x y : ℝ) : |x + y| ≤ |x| + |y| := by
-  sorry
+  rcases le_or_gt 0 (x + y) with h | h
+  · rw [abs_of_nonneg]
+    linarith [le_abs_self x, le_abs_self y]
+    exact h
+  · rw [abs_of_neg]
+    linarith [neg_le_abs_self x, neg_le_abs_self y]
+    exact h
 
 theorem lt_abs : x < |y| ↔ x < y ∨ x < -y := by
-  sorry
+  constructor
 
-theorem abs_lt : |x| < y ↔ -y < x ∧ x < y := by
-  sorry
+  · intro xlty
+    rcases le_or_gt 0 y with h | h
+    · rw [abs_of_nonneg h] at xlty
+      left
+      exact xlty
 
-end MyAbs
+    · rw [abs_of_neg h] at xlty
+      right
+      exact xlty
+
+  · intro h1
+    rcases le_or_gt 0 y with h | h
+    · rcases h1 with l | r
+      · rw [abs_of_nonneg]
+        exact l
+        exact h
+      · rw [abs_of_nonneg]
+        apply lt_trans r
+        sorry
+        sorry
+
+
+    · rcases h1 with l | r
+      rw [abs_of_neg]
+      sorry
+      sorry
+      sorry
 
 end
 
@@ -125,4 +167,3 @@ example (P : Prop) : ¬¬P → P := by
 
 example (P Q : Prop) : P → Q ↔ ¬P ∨ Q := by
   sorry
-
